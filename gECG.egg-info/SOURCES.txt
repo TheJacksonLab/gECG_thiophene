@@ -1,0 +1,11 @@
+LICENSE
+README.md
+setup.py
+gECG.egg-info/PKG-INFO
+gECG.egg-info/SOURCES.txt
+gECG.egg-info/dependency_links.txt
+gECG.egg-info/top_level.txt
+src/__init__.py
+src/model_gECG.py
+src/prep.py
+src/train_CG3R.py

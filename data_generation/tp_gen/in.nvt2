@@ -1,0 +1,43 @@
+units real
+atom_style full
+
+dimension 3
+boundary p p p
+
+pair_style lj/cut/coul/long 12.0 12.0
+pair_modify mix geometric
+
+bond_style harmonic 
+angle_style harmonic
+dihedral_style opls #fourier 
+improper_style cvff # harmonic
+special_bonds lj/coul 0.0 0.0 0.5 
+
+read_data out_nvt.dat1
+
+timestep  1 
+
+kspace_style    pppm 1e-5
+#kspace_modify  slab 3.0
+#dielectric      1
+
+neighbor        1.0 bin
+neigh_modify    delay 0 every 1 check yes
+
+thermo          1000
+thermo_style    custom step temp density press pxx pyy pzz pxy pxz pyz ke pe etotal vol lx ly lz
+
+velocity all create 500 1994
+#velocity all scale 600 # 42859 dist gaussian
+
+#dump            1 all xyz 1000 dump_relax.xyz
+dump            1 all custom 1000 dump_relax.xyz id type x y z ix iy iz
+dump_modify     1 sort id
+
+#NVT/NPT melt run 
+fix             1 all nvt temp 500 500 100
+#fix             1 all npt temp 600 600 100 iso 1 1 1000
+fix             2 all recenter 0.5 0.5 0.5 units fraction
+run             100000
+unfix           1
+write_data      out_nvt.dat

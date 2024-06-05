@@ -4,6 +4,10 @@ Code for Generalized ECG (gECG) for thiophene polymers paper
 
 ## Introduction
 
+Electronic coarse graining (ECG) is a machine-learning-based approach that can predict quantum mechanical (QM) optoelectronic properties of molecules (and materials) directly based on molecular configurations at the coarse-grained resolution.
+
+This project invovles the development of generalized ECG (gECG) models for thiophene polymers, including the necessary codes, datasets, and the trained models. More information can be found in our preprint paper ''Generalized Electronic Coarse Graining for Thiophene Polymers'' via XXX.
+
 ## Installation and Dependences
 
 ```bash
@@ -28,7 +32,54 @@ Install the required packages
 pip install -r requirements.txt
 ```
 
+```bash
+cd gECG_thiophene/
+pip install -e .
+```
+
 ## Usage
+
+### Generate new polymer data
+
+./data_generation/ provides the baisc codes for generating the polymer datasets. The workflow are as follows:
+
+1. Creating polymer sequences based on SMILES using generate_polymer.py
+    - It utlizes rdkit
+    - Change length in lengths_list to control the degree of polymerization
+
+2. (Optional) Sampling conformations with molecular dynamics simulations
+    - Prepare the inputs for Lammps with the OPLS-AA force fields inputs
+        - Can be conducted with LigPargen server
+        - Or locally with generate_lmp.py, which needs BOSS installed locally (refer to [Local ligPargen](https://www.linkedin.com/pulse/how-install-ligpargen-server-locally-leela-sriram-dodda/))
+    - Run MD simulations
+        - Sample inputs in ./data_generation/tp_gen/in.nvt*
+    - Collect confomrations from MD trajectories and prepare them in the format of ORCA inputs
+        - Refer to ./data_generation/run_MD.py
+
+3. Performing QM calculations with ORCA
+    - Sample inputs for ZINDO/S and DFT are provided in ./data_generation/tp_gen/*.inp
+
+4. Collect ORCA inputs and prepare datasets
+    1. AA resolution: ./data_generation/collect_data*.py
+    2. CG resolutions: ./data_generation/CG/CG*.py
+
+### Train gECG models
+
+Once the dataset is generated or downloaded (see the Data section below), the gECG model can be trained.
+
+For a quick test of the model training and evalution,
+
+```bash
+python -m scripts.train_CG3R.py
+```
+
+For complete training the gECG models at various CG resolutions, change the datasets accordingly.
+
+### Inference gECG models
+
+
+
+### Transfer learning
 
 ## Data
 
@@ -36,7 +87,14 @@ Because the datasets are too large, they need to be downloaded from [Zenodo]
 
 ### Processed data
 
-Datasets include
+Datasets of coarse-grained polymers at various resolutions are included.
+
+For loading data,
+
+```python
+import torch
+dataset = torch.load(dataset_to_load)
+```
 
 ### Raw data
 
