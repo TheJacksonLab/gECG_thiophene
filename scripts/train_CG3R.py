@@ -2,9 +2,8 @@ import torch
 from sklearn.model_selection import train_test_split
 from dig.threedgraph.evaluation import ThreeDEvaluator
 import os
-import numpy as np
 from src.model_gECG import gECG, run_modified
-from src.prep import prep_data,eval_test
+from src.tools import prep_data,eval_test
 
 train_dataset, test_dataset = prep_data(['../data/processed/dftdata_CG3R_L6.pt',
                                          ],isvalid=False,f_split=0.9) # f_split gives the 
@@ -22,6 +21,6 @@ model = gECG(cutoff=5.0, num_layers=3, hidden_channels=256,
 run3d.run(device, train_dataset, valid_dataset, test_dataset, model, loss_func, evaluation,
         epochs=10, batch_size=32, vt_batch_size=16, lr=0.0005, lr_decay_factor=0.5, lr_decay_step_size=15,save_dir='./save_train/',log_dir='./save_train/',is_test=False)
 
-MAE, r2 = eval_test("./save_train/valid_checkpoint.pt",model,test_dataset,batch_size=256,device=device)
+MAE, r2 = eval_test(model,test_dataset,batch_size=256,device=device,checkpoint_file="./save_train/valid_checkpoint.pt")
 os.system('rm -r ./save_train')  # Clean up the directory after each run
 

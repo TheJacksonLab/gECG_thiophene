@@ -2,7 +2,7 @@ import torch
 from sklearn.model_selection import train_test_split
 from dig.threedgraph.evaluation import ThreeDEvaluator
 from model_modified import gECG, run_modified
-from prep import prep_data,eval_test
+from src.tools import prep_data,eval_test
 
 train_dataset, test_dataset = prep_data(['../data/processed/data_CG3R_L6.pt',
                                          '../data/processed/data_CG3R_L10.pt',

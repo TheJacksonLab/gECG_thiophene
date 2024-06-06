@@ -4,7 +4,7 @@ Code for Generalized ECG (gECG) for thiophene polymers paper
 
 ## Introduction
 
-Electronic coarse graining (ECG) is a machine-learning-based approach that can predict quantum mechanical (QM) optoelectronic properties of molecules (and materials) directly based on molecular configurations at the coarse-grained resolution.
+Electronic coarse graining (ECG) is a machine learning approach that can predict quantum mechanical (QM) optoelectronic properties of molecules (and materials) directly based on molecular configurations at the coarse-grained (CG) resolution.
 
 This project invovles the development of generalized ECG (gECG) models for thiophene polymers, including the necessary codes, datasets, and the trained models. More information can be found in our preprint paper ''Generalized Electronic Coarse Graining for Thiophene Polymers'' via XXX.
 
@@ -70,16 +70,33 @@ Once the dataset is generated or downloaded (see the Data section below), the gE
 For a quick test of the model training and evalution,
 
 ```bash
-python -m scripts.train_CG3R.py
+cd scripts/
+python train_CG3R.py
 ```
 
 For complete training the gECG models at various CG resolutions, change the datasets accordingly.
 
-### Inference gECG models
+### gECG model inference
 
+For a sample model inference and evaluation,
 
+```bash
+cd scripts/
+python evaluate.py
+```
 
-### Transfer learning
+The outputs are saved into the `output.txt'. The MAE and R2 are printed.
+
+### Fine-tuning of gECG models
+
+One example of fine-tuning gECG models is provided. It shows how to improve the model from the ZINDO/S precision to the DFT precision with a small DFT dataset.
+
+```bash
+cd scripts/
+python fine_tuning.py
+```
+
+It involves a two-step (partial-then-full) fine-tuning, which in total takes around 5-10 min on laptop CPU.
 
 ## Data
 
@@ -87,7 +104,7 @@ Because the datasets are too large, they need to be downloaded from [Zenodo]
 
 ### Processed data
 
-Datasets of coarse-grained polymers at various resolutions are included.
+Datasets of CG polymers at various resolutions are included. The details of the CG representations are provided in the paper.
 
 For loading data,
 

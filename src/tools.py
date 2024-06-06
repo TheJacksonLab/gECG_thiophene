@@ -51,10 +51,11 @@ def prep_data_random(data_pt_list,f_split = 0.8, isvalid=True, f_split_valid=0.2
 #     model = model.to(device)
 
 
-def eval_test(checkpoint_file,model,test_dataset,batch_size,device):
+def eval_test(model,test_dataset,batch_size,device,checkpoint_file=[]):
 
-    checkpoint = torch.load(checkpoint_file)  # replace with your checkpoint's path
-    model.load_state_dict(checkpoint['model_state_dict'])
+    if checkpoint_file:
+        checkpoint = torch.load(checkpoint_file)  # replace with your checkpoint's path
+        model.load_state_dict(checkpoint['model_state_dict'])
 
     # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
@@ -99,3 +100,22 @@ def eval_test(checkpoint_file,model,test_dataset,batch_size,device):
     plt.savefig('./performance.png')
  
     return average_loss, r2
+
+def predict(model,test_dataset,batch_size,device):
+    loader_test = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+    loss_func = torch.nn.L1Loss()
+
+    total_loss = 0
+    all_preds = []
+
+    for data in loader_test:
+        data = data.to(device)
+        with torch.no_grad():
+            output = model(data).squeeze()
+        loss = loss_func(output, data.y.squeeze())
+        total_loss += loss.item() * len(data.y)
+        all_preds.append(output.cpu().numpy())
+
+    all_preds = np.concatenate(all_preds)
+    return all_preds
