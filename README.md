@@ -87,7 +87,7 @@ It involves a two-step (partial-then-full) fine-tuning, which in total takes aro
 
 ## Data
 
-Due to the large size of the datasets, they need to be downloaded from [Zenodo](!!!)
+Due to the large size of the datasets, they need to be downloaded from [Zenodo](https://doi.org/10.5281/zenodo.12170164)
 
 ### Processed data
 
